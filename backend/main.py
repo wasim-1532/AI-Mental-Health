@@ -3,7 +3,7 @@ from fastapi import FastAPI, Form
 from pydantic import BaseModel
 import uvicorn
 
-from ai_agent import graph, SYSTEM_PROMPT, parse_response
+from backend.ai_agent import graph, SYSTEM_PROMPT, parse_response
 
 app = FastAPI()
 
