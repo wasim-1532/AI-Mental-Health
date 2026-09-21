@@ -1,10 +1,10 @@
 # SafeSpace (2.0) – AI Mental Health Therapist
 
-SafeSpace is an AI-powered mental health companion that combines a chat-style frontend, an LLM-based backend agent, and integrations with Twilio WhatsApp and Google Maps. It is designed to offer empathetic, tool-augmented support, including:
+SafeSpace is an AI-powered mental health companion that combines a chat-style frontend, an LLM-based backend agent, and integrations with Twilio WhatsApp and Locationiq Maps. It is designed to offer empathetic, tool-augmented support, including:
 
 - Conversational mental health guidance using a therapeutic LLM (MedGemma via Groq)
 - Detection of crisis scenarios with an emergency call tool (Twilio voice)
-- A location-aware tool that finds nearby therapists using Google Maps
+- A location-aware tool that finds nearby therapists using Locationiq Maps
 - A simple Streamlit chat UI for web, plus a Twilio WhatsApp webhook for chat over WhatsApp
 
 The project is structured as a small, opinionated demo of how to build a **tool-using AI agent** for mental health support.
@@ -50,7 +50,7 @@ safespace-ai-therapist/
     - `emergency_call_tool() -> None`
       - Uses `call_emergency()` (from `tools.py`) to trigger a Twilio voice call to a safety helpline.
     - `find_nearby_therapists_by_location(location: str) -> str`
-      - Uses the Google Maps API to geocode a location and return nearby therapists (name, address, phone).
+      - Uses the Locationiq Maps API to geocode a location and return nearby therapists (name, address, phone).
   - Configures the LLM:
     - Uses `ChatGroq` with model `"openai/gpt-oss-120b"` and `GROQ_API_KEY` from `config.py`.
     - Creates a REAct agent via `create_react_agent(llm, tools=tools)`.
@@ -60,7 +60,7 @@ safespace-ai-therapist/
 - **`backend/config.py`** (implied)
   - Should provide configuration values such as:
     - `GROQ_API_KEY`
-    - `GOOGLE_MAPS_API_KEY`
+    - `Locationiq_MAPS_API_KEY`
     - Twilio credentials (e.g., `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, phone numbers)
   - You create this file yourself and **do not commit your secrets**.
 
@@ -84,7 +84,7 @@ safespace-ai-therapist/
   - `langchain-groq` with `ChatGroq`
 - **Integrations:**
   - Twilio (WhatsApp + Voice)
-  - Google Maps API (Places + Geocoding)
+  - Locationiq Maps API (Places + Geocoding)
   - Geopy / Requests (supporting utilities)
 
 Dependencies (from `pyproject.toml`):
@@ -112,7 +112,7 @@ Dependencies (from `pyproject.toml`):
 - [`uv`](https://github.com/astral-sh/uv) installed (for virtual environment + dependency management).
 - API keys / credentials for:
   - **Groq** (LLM): `GROQ_API_KEY`
-  - **Google Maps**: `GOOGLE_MAPS_API_KEY`
+  - **Locationiq Maps**: `GOOGLE_MAPS_API_KEY`
   - **Twilio**:
     - `TWILIO_ACCOUNT_SID`
     - `TWILIO_AUTH_TOKEN`
@@ -151,7 +151,7 @@ Create a file `backend/config.py` with your keys. For example:
 # backend/config.py
 
 GROQ_API_KEY = "your_groq_api_key_here"
-GOOGLE_MAPS_API_KEY = "your_google_maps_api_key_here"
+LOCATIONIQ_MAPS_API_KEY = "your_google_maps_api_key_here"
 
 # Twilio (used by tools.py / emergency_call_tool)
 TWILIO_ACCOUNT_SID = "your_twilio_account_sid_here"
@@ -311,11 +311,11 @@ Now, messages sent to your Twilio WhatsApp number should be forwarded to `/whats
 
 ---
 
-## Google Maps Therapist Finder Tool
+## Locationiq Maps Therapist Finder Tool
 
 The tool `find_nearby_therapists_by_location(location: str)` in `backend/ai_agent.py`:
 
-- Uses `GOOGLE_MAPS_API_KEY` and the `googlemaps` Python client.
+- Uses ` LOCATIONIQ_MAPS_API_KEY` and the `locationiqmaps` Python client.
 - Steps:
   1. Geocodes the user-provided location string to latitude/longitude.
   2. Calls `places_nearby` with `keyword="Psychotherapist"` and a 5km radius.
@@ -399,7 +399,7 @@ If you or someone you know is in immediate danger, contact local emergency servi
 - **`backend/config.py`** (implied, not shown)
   - Should provide configuration values such as:
     - `GROQ_API_KEY`
-    - `GOOGLE_MAPS_API_KEY`
+    - `LOCATIONIQ_MAPS_API_KEY`
     - Twilio credentials (e.g., `TWILIO_ACCOUNT_SID`, `TWILIO_AUTH_TOKEN`, phone numbers)
   - You create this file yourself and **do not commit your secrets**.
 
@@ -423,14 +423,14 @@ If you or someone you know is in immediate danger, contact local emergency servi
   - `langchain-groq` with `ChatGroq`
 - **Integrations:**
   - Twilio (WhatsApp + Voice)
-  - Google Maps API (Places + Geocoding)
+  - Locationiq Maps API (Places + Geocoding)
   - Geopy / Requests (supporting utilities)
 
 Dependencies (from `pyproject.toml`):
 
 - `fastapi`
 - `geopy`
-- `googlemaps`
+- `locationiqmaps`
 - `langchain`
 - `langchain-groq`
 - `langchain-openai`
@@ -451,7 +451,7 @@ Dependencies (from `pyproject.toml`):
 - [`uv`](https://github.com/astral-sh/uv) installed (for virtual environment + dependency management).
 - API keys / credentials for:
   - **Groq** (LLM): `GROQ_API_KEY`
-  - **Google Maps**: `GOOGLE_MAPS_API_KEY`
+  - **Locationiq Maps**: `LOCATIONIQ_MAPS_API_KEY`
   - **Twilio**:
     - `TWILIO_ACCOUNT_SID`
     - `TWILIO_AUTH_TOKEN`
@@ -483,7 +483,7 @@ Create a file `backend/config.py` with your keys. For example:
 # backend/config.py
 
 GROQ_API_KEY = "your_groq_api_key_here"
-GOOGLE_MAPS_API_KEY = "your_google_maps_api_key_here"
+LOCATIONIQ_MAPS_API_KEY = "your_google_maps_api_key_here"
 
 # Twilio (used by tools.py / emergency_call_tool)
 TWILIO_ACCOUNT_SID = "your_twilio_account_sid_here"
@@ -636,7 +636,7 @@ Now, messages sent to your Twilio WhatsApp number should be forwarded to `/whats
 
 ---
 
-## Google Maps Therapist Finder Tool
+## Location Maps Therapist Finder Tool
 
 The tool `find_nearby_therapists_by_location(location: str)` in `backend/ai_agent.py`:
 
@@ -679,19 +679,6 @@ The `emergency_call_tool()` in `backend/ai_agent.py`:
   - `parse_response()` walks through the streaming updates to detect:
     - Which tool (if any) was called.
     - The final agent message to return.
-
-### Testing
-
-- There is a sample/test file `backend/test_location_tool.py` (not shown here) for validating the location-based therapist finder.
-- You can run tests (if configured) with:
-
-```bash
-uv run pytest
-```
-
-(If no tests are defined yet, you can create them under a `tests/` folder or alongside backend modules.)
-
----
 
 ## Suggested Next Steps
 
