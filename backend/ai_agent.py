@@ -1,5 +1,5 @@
-from langchain.agents import tool
-from tools import query_medgemma, call_emergency
+from langchain_core.tools import tool
+from backend.tools import query_medgemma, call_emergency
 
 @tool
 def ask_mental_health_specialist(query: str) -> str:
@@ -26,7 +26,7 @@ import requests
 import sys
 import os
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from config import LOCATIONIQ_API_KEY
+from backend.config import LOCATIONIQ_API_KEY
 
 @tool
 def find_nearby_therapists_by_location(location: str) -> str:
@@ -212,7 +212,7 @@ def find_nearby_therapists_by_location(location: str) -> str:
 #from langchain_openai import ChatOpenAI
 from langchain_groq import ChatGroq
 from langgraph.prebuilt import create_react_agent
-from config import GROQ_API_KEY
+from backend.config import GROQ_API_KEY
 
 tools = [ask_mental_health_specialist, emergency_call_tool, find_nearby_therapists_by_location]
 #llm = ChatOpenAI(model="gpt-4", temperature=0.2, api_key=OPENAI_API_KEY)
